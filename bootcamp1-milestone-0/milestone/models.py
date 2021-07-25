@@ -1,7 +1,7 @@
 import jwt
 import datetime
 
-from milestone import create_app as app, db, bcrypt
+from milestone import create_app as app, db, bcrypt, global_config
 
 """
     Models for Authentication and user management
@@ -30,7 +30,7 @@ class User(db.Model):
             }
             return jwt.encode(
                 payload,
-                app.config.get('SECRET_KEY'),
+                global_config.get('SECRET_KEY'),
                 algorithm='HS256'
             )
         except Exception as e:
@@ -44,7 +44,7 @@ class User(db.Model):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token, config.get('SECRET_KEY'), algorithms =['HS256'])
+            payload = jwt.decode(auth_token, global_config.get('SECRET_KEY'), algorithms =['HS256'])
             return payload
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
